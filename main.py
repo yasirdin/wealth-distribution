@@ -35,20 +35,15 @@ pareto = wealthDistributor(population=100)
 individual_nums = list(pareto.wealths.keys())
 values = list(pareto.wealths.values())
 
-fig = plt.figure(figsize=(15,5))
+fig = plt.figure(figsize=(20,5))
 ax1 = fig.add_subplot(2,2,1)
 ax2 = fig.add_subplot(2,2,2)
 ax3 = fig.add_subplot(2,2,3)
 
-ax1.bar(range(len(values)), values, tick_label=individual_nums)
-
 # number of iterations to run
 iterations = 1000
-count = 0
-
 for i in range(iterations):
-    count += 1
-    print('iteration:', count) 
+    print('iteration:', i) 
 
     # running redistribution
     pareto.distributor()
@@ -59,14 +54,17 @@ for i in range(iterations):
     ax1.clear()
     ax1.bar(range(len(individual_nums)), values, tick_label=individual_nums, width=1)
     ax1.tick_params(labelsize=8, rotation=90)
+    ax1.set_title('unordered bar chart')
 
     # ordered bar chart
     ax2.clear()
     ax2.bar(range(len(values)), sorted(values), tick_label=individual_nums)
+    ax2.set_title('ordered bar chart')
 
     # wealth distribution histogram
     ax3.clear()
     ax3.hist(list(pareto.wealths.values()))
+    ax3.set_title('wealth distribution histogram')
 
     plt.pause(0.01)
 
