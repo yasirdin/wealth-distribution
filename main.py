@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -6,11 +7,11 @@ import random
 class wealthDistributor():
     def __init__(self, population):
         self.population = population
-        
         # wealth at time=0
         self.wealths = {}
         for val in np.arange(0, self.population):
-            self.wealths[val] = 1
+	    # wealth to start with
+            self.wealths[val] = 100
 
     def distributor(self):
         """this function will run redistribution of wealth"""
@@ -28,22 +29,42 @@ class wealthDistributor():
             wealth = self.wealths[val]
             self.wealths[val] = wealth + 1
 
-# instantiating wealthDistributor:
-pareto = wealthDistributor(population=1000)
+# instantiating wealthDistributor and providing population
+pareto = wealthDistributor(population=100)
 
+individual_nums = list(pareto.wealths.keys())
+values = list(pareto.wealths.values())
+
+fig = plt.figure(figsize=(20,5))
+ax1 = fig.add_subplot(1,2,1)
+ax2 = fig.add_subplot(1,2,2)
+
+ax1.bar(range(len(values)), values, tick_label=individual_nums)
+
+# number of iterations to run
 iterations = 1000
+count = 0
 
 for i in range(iterations):
-    # run redistribution
+    count += 1
+    print('iteration:', count) 
+
+    # running redistribution
     pareto.distributor()
     
-    plt.clf()
     # wealths of each individual in population
-    x = pareto.wealths.values()
-    plt.hist(x)
-    plt.pause(0.25)
+    data = pareto.wealths
+
+    # bar chart
+    individual_nums = list(pareto.wealths.keys())
+    ax1.clear()
+    ax1.bar(range(len(data)), list(pareto.wealths.values()), tick_label=individual_nums, width=1)
+    ax1.tick_params(labelsize=8, rotation=90)
+
+    # wealth distribution histogram
+    ax2.clear()
+    ax2.hist(list(pareto.wealths.values()))
+
+    plt.pause(0.1)
 
 plt.show()
-    
-    # time.sleep(1)
-
